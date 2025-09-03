@@ -15,7 +15,7 @@ class HealthData(db.Model):
     date = db.Column(db.Date, nullable=False)
     exercise = db.Column(db.Integer, nullable=False)
     meditation = db.Column(db.Integer, nullable=False)
-    sleep = db.Column(db.Integer, nullable=False)
+    sleep = db.Column(db.Float, nullable=False)
 
     def __repr__(self):
         return f'<HealthData {self.id}>'
