@@ -4,7 +4,6 @@ from flask import Flask, render_template, request, redirect, url_for, flash
 from flask_sqlalchemy import SQLAlchemy
 from forms import HealthDataForm
 
-db = SQLAlchemy(app)
 logging.basicConfig(level=logging.INFO)
 app = Flask(__name__)
 app.config['SECRET_KEY'] = os.environ.get('SECRET_KEY', 'your_secret_key')
@@ -27,9 +26,12 @@ class HealthData(db.Model):
     def __repr__(self):
         return f'<HealthData {self.id}>'
 
-@app.before_first_request
-def create_tables():
+
+try:
     db.create_all()
+    logging.info('Database tables created.')
+except Exception as e:
+    logging.error(f'Error creating database tables: {e}')
     
 @app.route('/')
 def index():
