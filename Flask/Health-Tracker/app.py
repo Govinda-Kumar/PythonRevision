@@ -13,6 +13,12 @@ app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
 try:
     db = SQLAlchemy(app)
     logging.info('Database connection initialized.')
+    with app.app_context():
+        try:
+            db.create_all()
+            logging.info('Database tables created.')
+        except Exception as e:
+            logging.error(f'Error creating database tables: {e}')
 except Exception as e:
     logging.error(f'Error initializing database: {e}')
 
@@ -27,12 +33,7 @@ class HealthData(db.Model):
         return f'<HealthData {self.id}>'
 
 
-with app.app_context():
-    try:
-        db.create_all()
-        logging.info('Database tables created.')
-    except Exception as e:
-        logging.error(f'Error creating database tables: {e}')
+
     
 @app.route('/')
 def index():
